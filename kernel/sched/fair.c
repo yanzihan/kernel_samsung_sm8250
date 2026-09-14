@@ -8563,18 +8563,22 @@ again:
 		 * entity, update_curr() will update its vruntime, otherwise
 		 * forget we've ever seen it.
 		 */
+		if (curr) {
 #ifdef CONFIG_FAST_TRACK
 			if (curr->on_rq) {
 				update_curr(cfs_rq);
 				if (norm && curr == &prev->se)
 					__ftt_normalize_vruntime(cfs_rq, curr);
-			} else
+			} else {
+				curr = NULL;
+			}
 #else
 			if (curr->on_rq)
 				update_curr(cfs_rq);
 			else
-#endif
 				curr = NULL;
+#endif
+		}
 
 			/*
 			 * This call to check_cfs_rq_runtime() will do the
@@ -8589,7 +8593,6 @@ again:
 					goto idle;
 
 				goto simple;
-			}
 		}
 
 		se = pick_next_entity(cfs_rq, curr);
