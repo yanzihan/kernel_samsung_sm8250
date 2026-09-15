@@ -16,6 +16,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       # 1. Checkout repository with submodules (shallow clone)
       - name: Checkout repository
@@ -72,7 +74,7 @@ jobs:
         if: github.event.inputs.release
         uses: softprops/action-gh-release@v2.4.2
         env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           body_path: version.txt
           tag_name: "${{ env.RELEASE_TS }}"
